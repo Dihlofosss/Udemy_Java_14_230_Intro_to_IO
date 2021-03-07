@@ -11,35 +11,18 @@ public class Locations implements Map<Integer, Location>
 {
 	private static Map<Integer, Location> locations = new HashMap<>();
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
-		FileWriter locFile = null;
-		
-		try
+		try (FileWriter locFile = new FileWriter("locations.txt");
+			FileWriter dirFile = new FileWriter("directions.txt"))
 		{
-			locFile = new FileWriter("locations.txt");
 			for (Location locations : locations.values())
 			{
 				locFile.write(locations.getLocationID() + "," + locations.getDescription() + "\n");
-			}
-		}
-		catch (IOException e)
-		{
-			System.out.println("I/O exception, catch block");
-			e.printStackTrace();
-		}
-		finally
-		{
-			try
-			{
-				if(locFile != null)
+				for (String direction : locations.getExits().keySet())
 				{
-					locFile.close();
+					dirFile.write(locations.getLocationID() + "," + direction + "," + locations.getExits().get(direction) + "\n");
 				}
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
 			}
 		}
 	}
