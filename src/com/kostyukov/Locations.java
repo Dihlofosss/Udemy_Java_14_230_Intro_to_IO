@@ -25,8 +25,10 @@ public class Locations implements Map<Integer, Location>
 		}
 	}
 	
-	static {
+	static
+	{
 		Scanner scanner = null;
+		
 		try
 		{
 			scanner = new Scanner(new FileReader("locations.txt"));
@@ -35,8 +37,35 @@ public class Locations implements Map<Integer, Location>
 			{
 				int loc = scanner.nextInt();
 				scanner.skip(scanner.delimiter());
-				String desctiption = scanner.nextLine();
-				locations.put(loc, new Location(loc, desctiption));
+				String description = scanner.nextLine();
+				System.out.println("Imported location: " + loc + ": " + description);
+				locations.put(loc, new Location(loc, description));
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if (scanner != null)
+				scanner.close();
+		}
+		
+		try
+		{
+			scanner = new Scanner(new FileReader("directions.txt"));
+			scanner.useDelimiter(",");
+			while (scanner.hasNextLine())
+			{
+				int loc = scanner.nextInt();
+				scanner.skip(scanner.delimiter());
+				String direction = scanner.next();
+				scanner.skip(scanner.delimiter());
+				int destination = Integer.parseInt(scanner.nextLine());
+				System.out.println(loc + ": " + direction + ": " + destination);
+				Location location = locations.get(loc);
+				location.addExit(direction, destination);
 			}
 		}
 		catch (IOException e)
