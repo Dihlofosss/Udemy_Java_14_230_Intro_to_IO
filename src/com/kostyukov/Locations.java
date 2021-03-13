@@ -1,9 +1,13 @@
 package com.kostyukov;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class Locations implements Map<Integer, Location>
 {
@@ -27,78 +31,41 @@ public class Locations implements Map<Integer, Location>
 	
 	static
 	{
-		Scanner scanner = null;
-		
-		try
+		try (BufferedReader reader = new BufferedReader(new FileReader("res/locations_big.txt")))
 		{
-			scanner = new Scanner(new FileReader("res/locations_big.txt"));
-			scanner.useDelimiter(",");
-			while (scanner.hasNextLine())
+			String input;
+			while ((input = reader.readLine()) != null)
 			{
-				int loc = scanner.nextInt();
-				scanner.skip(scanner.delimiter());
-				String description = scanner.nextLine();
+				String[] data = input.split(",");
+				int loc = Integer.parseInt(data[0]);
+				String description = data[1];
+				
 				System.out.println("Imported location: " + loc + ": " + description);
 				locations.put(loc, new Location(loc, description));
 			}
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			if (scanner != null)
-				scanner.close();
-		}
 		
-		try
+		try (BufferedReader reader = new BufferedReader(new FileReader("res/directions_big.txt")))
 		{
-			scanner = new Scanner(new FileReader("res/directions_big.txt"));
-			scanner.useDelimiter(",");
-			while (scanner.hasNextLine())
+			String input;
+			while ((input = reader.readLine()) != null)
 			{
-				int loc = scanner.nextInt();
-				scanner.skip(scanner.delimiter());
-				String direction = scanner.next();
-				scanner.skip(scanner.delimiter());
-				int destination = Integer.parseInt(scanner.nextLine());
+				String[] data = input.split(",");
+				int loc = Integer.parseInt(data[0]);
+				String direction = data[1];
+				int destination = Integer.parseInt(data[2]);
+				
 				System.out.println(loc + ": " + direction + ": " + destination);
 				Location location = locations.get(loc);
 				location.addExit(direction, destination);
 			}
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		finally
-		{
-			if (scanner != null)
-				scanner.close();
-		}
-		
-//		locations.put(0, new Location(0, "You are sitting in front of a computer learning Java"));
-//		locations.put(1, new Location(1, "You are standing at the end of a road before a small brick building"));
-//		locations.put(2, new Location(2, "You are at the top of a hill"));
-//		locations.put(3, new Location(3, "You are inside a building, a well house for a small spring"));
-//		locations.put(4, new Location(4, "You are in a valley beside a stream"));
-//		locations.put(5, new Location(5, "You are in the forest"));
-//
-//		locations.get(1).addExit("W", 2);
-//		locations.get(1).addExit("E", 3);
-//		locations.get(1).addExit("S", 4);
-//		locations.get(1).addExit("N", 5);
-//
-//		locations.get(2).addExit("N", 5);
-//
-//		locations.get(3).addExit("W", 1);
-//
-//		locations.get(4).addExit("N", 1);
-//		locations.get(4).addExit("W", 2);
-//
-//		locations.get(5).addExit("S", 1);
-//		locations.get(5).addExit("W", 2);
 	}
 	
 	@Override
