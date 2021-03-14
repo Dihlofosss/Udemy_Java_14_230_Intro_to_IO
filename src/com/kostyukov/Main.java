@@ -34,7 +34,6 @@ public class Main
             System.out.println();
 
             String direction = scanner.nextLine().toUpperCase();
-//			direction = InputAnalyzer(direction, " ");
 			if (direction.length() > 1)
 			{
 				String[] words = direction.split(" ");
@@ -56,31 +55,4 @@ public class Main
             }
         }
 	}
-	
-//	public static String InputAnalyzer(String input, String regex)
-//	{
-//		String[] inputToArray = input.split(regex);
-//		for (String word : inputToArray)
-//		{
-//			switch (word)
-//			{
-//				case "NORTH", "N" -> {
-//					return "N";
-//				}
-//				case "EAST", "E" -> {
-//					return "E";
-//				}
-//				case "SOUTH", "S" ->{
-//					return "S";
-//				}
-//				case "WEST", "W" ->{
-//					return "W";
-//				}
-//				case "QUIT", "Q" ->{
-//					return "Q";
-//				}
-//			}
-//		}
-//		return null;
-//	}
 }
