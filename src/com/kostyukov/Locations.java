@@ -9,22 +9,40 @@ public class Locations implements Map<Integer, Location>
 	
 	public static void main(String[] args) throws IOException
 	{
-		try (BufferedWriter locFile = new BufferedWriter(new FileWriter("res/locations.txt"));
-		     BufferedWriter dirFile = new BufferedWriter(new FileWriter("res/directions.txt")))
+		try (DataOutputStream gameData = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("res/locations.dat"))))
 		{
-			for (Location locations : locations.values())
+			for (Location location : locations.values())
 			{
-				locFile.write(locations.getLocationID() + "," + locations.getDescription() + "\n");
-				for (String direction : locations.getExits().keySet())
+				gameData.writeInt(location.getLocationID());            //write location number
+				gameData.writeUTF(location.getDescription());           //write location description
+				gameData.writeInt(location.getExits().size() - 1);   //write number of exits
+				for (String direction : location.getExits().keySet())
 				{
-					if (direction.equalsIgnoreCase("Q"))
+					if (direction.equals("Q"))
 					{
 						continue;
 					}
-					dirFile.write(locations.getLocationID() + "," + direction + "," + locations.getExits().get(direction) + "\n");
+					gameData.writeUTF(direction);
+					gameData.writeInt(location.getExits().get(direction));
 				}
 			}
 		}
+//		try (BufferedWriter locFile = new BufferedWriter(new FileWriter("res/locations.txt"));
+//		     BufferedWriter dirFile = new BufferedWriter(new FileWriter("res/directions.txt")))
+//		{
+//			for (Location locations : locations.values())
+//			{
+//				locFile.write(locations.getLocationID() + "," + locations.getDescription() + "\n");
+//				for (String direction : locations.getExits().keySet())
+//				{
+//					if (direction.equalsIgnoreCase("Q"))
+//					{
+//						continue;
+//					}
+//					dirFile.write(locations.getLocationID() + "," + direction + "," + locations.getExits().get(direction) + "\n");
+//				}
+//			}
+//		}
 	}
 	
 	static
