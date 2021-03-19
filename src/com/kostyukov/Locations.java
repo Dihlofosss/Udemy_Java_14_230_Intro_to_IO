@@ -47,19 +47,20 @@ public class Locations implements Map<Integer, Location>
 	
 	static
 	{
-		try (BufferedReader reader = new BufferedReader(new FileReader("res/locations_big.txt")))
+		try (Scanner scaner = new Scanner(new BufferedReader(new FileReader("res/locations_big.txt"))))
 		{
+			scaner.useDelimiter(",");
 			String input;
-			while ((input = reader.readLine()) != null)
+			while (scaner.hasNextLine())
 			{
-				String[] data = input.split(",");
-				int loc = Integer.parseInt(data[0]);
-				String description = data[1];
-				
+				int loc = scaner.nextInt();
+				scaner.skip(scaner.delimiter());
+				String description = scaner.nextLine();
 				System.out.println("Imported location: " + loc + ": " + description);
 				locations.put(loc, new Location(loc, description));
 			}
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
