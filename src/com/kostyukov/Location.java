@@ -10,9 +10,15 @@ public class Location
 	private final Map<String, Integer> exits;
 	
 	public Location(int locationID, String description) {
+		this(locationID, description, new LinkedHashMap<>());
+		this.exits.put("Q", 0);
+	}
+	
+	public Location(int locationID, String description, Map<String, Integer> exits)
+	{
 		this.locationID = locationID;
 		this.description = description;
-		this.exits = new LinkedHashMap<>();
+		this.exits = exits;
 		this.exits.put("Q", 0);
 	}
 	
