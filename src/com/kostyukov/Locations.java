@@ -9,22 +9,29 @@ public class Locations implements Map<Integer, Location>
 	
 	public static void main(String[] args) throws IOException
 	{
-		try (DataOutputStream gameData = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("res/locations.dat"))))
+//		try (DataOutputStream gameData = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("res/locations.dat"))))
+//		{
+//			for (Location location : locations.values())
+//			{
+//				gameData.writeInt(location.getLocationID());            //write location number
+//				gameData.writeUTF(location.getDescription());           //write location description
+//				gameData.writeInt(location.getExits().size() - 1);   //write number of exits
+//				for (String direction : location.getExits().keySet())
+//				{
+//					if (direction.equals("Q"))
+//					{
+//						continue;
+//					}
+//					gameData.writeUTF(direction);
+//					gameData.writeInt(location.getExits().get(direction));
+//				}
+//			}
+//		}
+		try(ObjectOutputStream gameData = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("res/locations.loc"))))
 		{
-			for (Location location : locations.values())
+			for(Location location : locations.values())
 			{
-				gameData.writeInt(location.getLocationID());            //write location number
-				gameData.writeUTF(location.getDescription());           //write location description
-				gameData.writeInt(location.getExits().size() - 1);   //write number of exits
-				for (String direction : location.getExits().keySet())
-				{
-					if (direction.equals("Q"))
-					{
-						continue;
-					}
-					gameData.writeUTF(direction);
-					gameData.writeInt(location.getExits().get(direction));
-				}
+				gameData.writeObject(location);
 			}
 		}
 //		try (BufferedWriter locFile = new BufferedWriter(new FileWriter("res/locations.txt"));
@@ -47,22 +54,35 @@ public class Locations implements Map<Integer, Location>
 	
 	static
 	{
-		try (DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream("res/locations.dat"))))
+//		try (DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream("res/locations.dat"))))
+//		{
+//			while (inputStream.available() > 0)
+//			{
+//				int loc = inputStream.readInt();
+//				String description = inputStream.readUTF();
+//				HashMap<String, Integer> exits = new LinkedHashMap<>();;
+//				short exitsAmount = (short) inputStream.readInt();
+//				for (short i = 0; i < exitsAmount; i++)
+//				{
+//					exits.put(inputStream.readUTF(),inputStream.readInt());
+//				}
+//				locations.put(loc, new Location(loc, description, exits));
+//			}
+//		}
+		try (ObjectInputStream inputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream("res/locations.loc"))))
 		{
-			while (inputStream.available() > 0)
+			while (true)
 			{
-				int loc = inputStream.readInt();
-				String description = inputStream.readUTF();
-				HashMap<String, Integer> exits = new LinkedHashMap<>();;
-				short exitsAmount = (short) inputStream.readInt();
-				for (short i = 0; i < exitsAmount; i++)
-				{
-					exits.put(inputStream.readUTF(),inputStream.readInt());
-				}
-				locations.put(loc, new Location(loc, description, exits));
+				Location location = (Location) inputStream.readObject();
+				System.out.println("Found location: " + location.getDescription());
+				locations.put(location.getLocationID(), location);
 			}
 		}
-//		try (Scanner scanner = new Scanner(new BufferedReader(new FileReader("res/locations_big.txt"))))
+		catch (ClassNotFoundException | EOFException e)
+		{
+			e.printStackTrace();
+		}
+		//		try (Scanner scanner = new Scanner(new BufferedReader(new FileReader("res/locations_big.txt"))))
 //		{
 //			scanner.useDelimiter(",");
 //			String input;

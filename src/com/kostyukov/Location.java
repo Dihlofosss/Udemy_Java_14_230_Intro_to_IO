@@ -1,13 +1,18 @@
 package com.kostyukov;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Location
+public class Location implements Serializable
 {
 	private final int locationID;
 	private final String description;
 	private final Map<String, Integer> exits;
+	
+	@Serial
+	private static final long serialVersionUID = 1L;
 	
 	public Location(int locationID, String description) {
 		this(locationID, description, new LinkedHashMap<>());
